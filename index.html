@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tulipanes</title>
+    <title>Tulipanes Para La Chaparra</title>
     <style>
         * {
             margin: 0;
@@ -100,7 +100,7 @@
             100% { opacity: 1; text-shadow: 0 0 25px rgba(255, 230, 0, 0.9); }
         }
 
-        /* Contenedor del jardín flexible con mayor espacio */
+        /* Contenedor del jardín flexible con espacio */
         .garden {
             position: relative;
             width: 100%;
@@ -134,7 +134,7 @@
             100% { transform: rotate(3deg); }
         }
 
-        /* Tallo del tulipán adaptativo */
+        /* Tallo del tulipán */
         .stem {
             width: 5px;
             background: linear-gradient(to right, #2e7d32, #4caf50);
@@ -184,50 +184,19 @@
         }
 
         .petal.back-left {
-            width: 21px;
-            height: 55px;
-            left: 4px;
-            top: 4px;
-            transform: rotate(-15deg);
-            background: linear-gradient(135deg, #fbc02d, #f57f17);
-            z-index: 1;
+            width: 21px; height: 55px; left: 4px; top: 4px; transform: rotate(-15deg); background: linear-gradient(135deg, #fbc02d, #f57f17); z-index: 1;
         }
-
         .petal.back-right {
-            width: 21px;
-            height: 55px;
-            right: 4px;
-            top: 4px;
-            transform: rotate(15deg);
-            background: linear-gradient(135deg, #fbc02d, #f57f17);
-            z-index: 1;
+            width: 21px; height: 55px; right: 4px; top: 4px; transform: rotate(15deg); background: linear-gradient(135deg, #fbc02d, #f57f17); z-index: 1;
         }
-
         .petal.center {
-            width: 26px;
-            height: 60px;
-            left: 12px;
-            top: 0px;
-            z-index: 2;
-            background: linear-gradient(135deg, #fff176, #fbc02d);
+            width: 26px; height: 60px; left: 12px; top: 0px; z-index: 2; background: linear-gradient(135deg, #fff176, #fbc02d);
         }
-
         .petal.front-left {
-            width: 22px;
-            height: 50px;
-            left: 7px;
-            top: 8px;
-            transform: rotate(-8deg);
-            z-index: 3;
+            width: 22px; height: 50px; left: 7px; top: 8px; transform: rotate(-8deg); z-index: 3;
         }
-
         .petal.front-right {
-            width: 22px;
-            height: 50px;
-            right: 7px;
-            top: 8px;
-            transform: rotate(8deg);
-            z-index: 3;
+            width: 22px; height: 50px; right: 7px; top: 8px; transform: rotate(8deg); z-index: 3;
         }
 
         .tulip:hover .flower-head {
@@ -245,6 +214,47 @@
             border-top: 3px solid #4caf50;
             z-index: 4;
             pointer-events: none;
+        }
+
+        /* Botón flotante de música */
+        .music-player {
+            position: fixed;
+            bottom: 45px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(15, 32, 39, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid #ffe600;
+            padding: 8px 14px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .music-player:hover {
+            transform: scale(1.05);
+        }
+
+        .music-player span {
+            color: #ffe600;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .music-icon {
+            font-size: 1.1rem;
+            animation: pulseMusic 1.5s infinite;
+        }
+
+        @keyframes pulseMusic {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
 
         /* Destellos mágicos */
@@ -265,14 +275,14 @@
             100% { transform: translateY(-250px) scale(1.5); opacity: 0; }
         }
 
-        /* Ajustes específicos para móviles pequeños */
         @media (max-width: 480px) {
-            .message-container {
-                padding-top: 10px;
+            .music-player {
+                bottom: 40px;
+                right: 10px;
+                padding: 6px 10px;
             }
-            .garden {
-                padding-bottom: 35px;
-                gap: 15px;
+            .music-player span {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -281,6 +291,17 @@
 
     <div class="night-sky" id="sky"></div>
 
+    <!-- Reproductor oculto de YouTube para Joan Sebastian - Voy a Conquistarte -->
+    <div id="youtube-audio-container" style="display:none;">
+        <iframe id="yt-player" width="200" height="200" src="https://www.youtube.com/embed/ZKL7ylvj8jU?enablejsapi=1&loop=1&playlist=ZKL7ylvj8jU" frameborder="0"></iframe>
+    </div>
+
+    <!-- Botón flotante de música -->
+    <div class="music-player" id="musicBtn" onclick="toggleMusic()">
+        <span class="music-icon" id="iconStatus">🎵</span>
+        <span id="textStatus">Reproducir Música</span>
+    </div>
+
     <div class="message-container">
         <h1>Tulipanes Para La Chaparra</h1>
         <p id="romantic-quote">"Siguele para mas mocosaa."</p>
@@ -288,12 +309,49 @@
     </div>
 
     <div class="garden" id="garden">
-        <!-- Los tulipanes se generan dinámicamente mediante JavaScript -->
+        <!-- Los tulipanes se generan dinámicamente -->
     </div>
 
     <div class="ground"></div>
 
+    <!-- API de YouTube para control total del audio -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
+        let player;
+        let isPlaying = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-player', {
+                events: {
+                    'onReady': () => {
+                        // El reproductor está listo
+                    }
+                }
+            });
+        }
+
+        function toggleMusic() {
+            const textStatus = document.getElementById('textStatus');
+            const iconStatus = document.getElementById('iconStatus');
+
+            if (!player || typeof player.playVideo !== 'function') {
+                alert("Cargando reproductor, espera un segundo y vuelve a intentar.");
+                return;
+            }
+
+            if (isPlaying) {
+                player.pauseVideo();
+                textStatus.textContent = "Reproducir Música";
+                iconStatus.textContent = "🎵";
+                isPlaying = false;
+            } else {
+                player.playVideo();
+                textStatus.textContent = "Pausar Música";
+                iconStatus.textContent = "🎶";
+                isPlaying = true;
+            }
+        }
+
         // Array de mensajes personalizados
         const quotes = [
             "\"Tienes suerte mugrosaa.\"",
@@ -315,7 +373,7 @@
 
         document.getElementById('romantic-quote').style.transition = 'opacity 0.25s ease-in-out';
 
-        // Crear estrellas en el cielo nocturno adaptado a la pantalla
+        // Crear estrellas en el cielo nocturno
         const sky = document.getElementById('sky');
         const starCount = window.innerWidth < 480 ? 35 : 60;
         for (let i = 0; i < starCount; i++) {
@@ -331,7 +389,7 @@
             sky.appendChild(star);
         }
 
-        // Generar los tulipanes en el jardín de manera responsiva
+        // Generar los tulipanes separados de forma responsiva
         const garden = document.getElementById('garden');
         const tulipCount = window.innerWidth < 480 ? 6 : 8;
 
@@ -367,7 +425,6 @@
             garden.appendChild(tulip);
         }
 
-        // Función para crear destellos mágicos al hacer clic
         function createSparkles(x, y) {
             for (let i = 0; i < 8; i++) {
                 const sparkle = document.createElement('div');
