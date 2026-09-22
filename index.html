@@ -77,7 +77,17 @@
             justify-content: center;
         }
 
-        .quote-btn {
+        .buttons-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+            pointer-events: auto;
+        }
+
+        .quote-btn, .music-link-btn {
             background: linear-gradient(135deg, #ffe600, #fbc02d);
             border: none;
             padding: 8px 16px;
@@ -88,11 +98,20 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 230, 0, 0.4);
             transition: transform 0.2s, background 0.2s;
-            pointer-events: auto;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .quote-btn:active {
+        .quote-btn:active, .music-link-btn:active {
             transform: scale(0.95);
+        }
+
+        .music-link-btn {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
         }
 
         @keyframes fadeInOut {
@@ -216,47 +235,6 @@
             pointer-events: none;
         }
 
-        /* Botón flotante de música */
-        .music-player {
-            position: fixed;
-            bottom: 45px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(15, 32, 39, 0.85);
-            backdrop-filter: blur(8px);
-            border: 2px solid #ffe600;
-            padding: 8px 14px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .music-player:hover {
-            transform: scale(1.05);
-        }
-
-        .music-player span {
-            color: #ffe600;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .music-icon {
-            font-size: 1.1rem;
-            animation: pulseMusic 1.5s infinite;
-        }
-
-        @keyframes pulseMusic {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
         /* Destellos mágicos */
         .sparkle {
             position: absolute;
@@ -276,13 +254,11 @@
         }
 
         @media (max-width: 480px) {
-            .music-player {
-                bottom: 40px;
-                right: 10px;
-                padding: 6px 10px;
+            .message-container {
+                padding-top: 10px;
             }
-            .music-player span {
-                font-size: 0.75rem;
+            .garden {
+                padding-bottom: 35px;
             }
         }
     </style>
@@ -291,21 +267,17 @@
 
     <div class="night-sky" id="sky"></div>
 
-    <!-- Reproductor oculto de YouTube para Joan Sebastian - Voy a Conquistarte -->
-    <div id="youtube-audio-container" style="display:none;">
-        <iframe id="yt-player" width="200" height="200" src="https://www.youtube.com/embed/ZKL7ylvj8jU?enablejsapi=1&loop=1&playlist=ZKL7ylvj8jU" frameborder="0"></iframe>
-    </div>
-
-    <!-- Botón flotante de música -->
-    <div class="music-player" id="musicBtn" onclick="toggleMusic()">
-        <span class="music-icon" id="iconStatus">🎵</span>
-        <span id="textStatus">Reproducir Música</span>
-    </div>
-
     <div class="message-container">
         <h1>Tulipanes Para La Chaparra</h1>
         <p id="romantic-quote">"Siguele para mas mocosaa."</p>
-        <button class="quote-btn" onclick="changeQuote()">haz clik para otro mensaje pitufinaa 💌</button>
+        
+        <div class="buttons-group">
+            <button class="quote-btn" onclick="changeQuote()">otro mensaje pitufinaa 💌</button>
+            <!-- Botón directo a YouTube para reproducir la canción sin bloqueos -->
+            <a href="https://www.youtube.com/watch?v=ZKL7ylvj8jU" target="_blank" class="music-link-btn">
+                ▶️ "Voy a Conquistarte" 🎶
+            </a>
+        </div>
     </div>
 
     <div class="garden" id="garden">
@@ -314,44 +286,7 @@
 
     <div class="ground"></div>
 
-    <!-- API de YouTube para control total del audio -->
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player;
-        let isPlaying = false;
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player', {
-                events: {
-                    'onReady': () => {
-                        // El reproductor está listo
-                    }
-                }
-            });
-        }
-
-        function toggleMusic() {
-            const textStatus = document.getElementById('textStatus');
-            const iconStatus = document.getElementById('iconStatus');
-
-            if (!player || typeof player.playVideo !== 'function') {
-                alert("Cargando reproductor, espera un segundo y vuelve a intentar.");
-                return;
-            }
-
-            if (isPlaying) {
-                player.pauseVideo();
-                textStatus.textContent = "Reproducir Música";
-                iconStatus.textContent = "🎵";
-                isPlaying = false;
-            } else {
-                player.playVideo();
-                textStatus.textContent = "Pausar Música";
-                iconStatus.textContent = "🎶";
-                isPlaying = true;
-            }
-        }
-
         // Array de mensajes personalizados
         const quotes = [
             "\"Tienes suerte mugrosaa.\"",
