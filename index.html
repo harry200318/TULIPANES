@@ -100,19 +100,19 @@
             100% { opacity: 1; text-shadow: 0 0 25px rgba(255, 230, 0, 0.9); }
         }
 
-        /* Contenedor del jardín flexible */
+        /* Contenedor del jardín flexible con mayor espacio */
         .garden {
             position: relative;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: flex-end;
             flex-wrap: wrap;
             z-index: 5;
-            padding: 0 10px 40px 10px;
-            gap: clamp(5px, 2vw, 25px);
+            padding: 0 20px 40px 20px;
+            gap: clamp(20px, 4vw, 50px);
         }
 
         /* Estilo de cada tulipán */
@@ -272,6 +272,7 @@
             }
             .garden {
                 padding-bottom: 35px;
+                gap: 15px;
             }
         }
     </style>
@@ -332,7 +333,7 @@
 
         // Generar los tulipanes en el jardín de manera responsiva
         const garden = document.getElementById('garden');
-        const tulipCount = window.innerWidth < 480 ? 7 : 9;
+        const tulipCount = window.innerWidth < 480 ? 6 : 8;
 
         for (let i = 0; i < tulipCount; i++) {
             const tulip = document.createElement('div');
