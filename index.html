@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tulipanes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+            overflow-x: hidden;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .night-sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite ease-in-out alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Mensaje interactivo superior adaptativo */
+        .message-container {
+            position: relative;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+            padding: 20px 15px 10px 15px;
+            margin-top: env(safe-area-inset-top);
+        }
+
+        .message-container h1 {
+            font-size: clamp(1.5rem, 4vw, 2.3rem);
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: #ffe600;
+            margin-bottom: 6px;
+            animation: fadeInOut 4s infinite alternate;
+        }
+
+        .message-container p {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            color: #e0f7fa;
+            margin-bottom: 10px;
+            padding: 0 10px;
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quote-btn {
+            background: linear-gradient(135deg, #ffe600, #fbc02d);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            color: #111;
+            font-weight: 600;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 230, 0, 0.4);
+            transition: transform 0.2s, background 0.2s;
+            pointer-events: auto;
+        }
+
+        .quote-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0.8; text-shadow: 0 0 10px rgba(255, 230, 0, 0.5); }
+            100% { opacity: 1; text-shadow: 0 0 25px rgba(255, 230, 0, 0.9); }
+        }
+
+        /* Contenedor del jardín flexible */
+        .garden {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            z-index: 5;
+            padding: 0 10px 40px 10px;
+            gap: clamp(5px, 2vw, 25px);
+        }
+
+        /* Estilo de cada tulipán */
+        .tulip {
+            position: relative;
+            bottom: 0;
+            cursor: pointer;
+            animation: sway 4s ease-in-out infinite alternate;
+            transform-origin: bottom center;
+        }
+
+        .tulip:nth-child(even) {
+            animation-duration: 5s;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes sway {
+            0% { transform: rotate(-3deg); }
+            100% { transform: rotate(3deg); }
+        }
+
+        /* Tallo del tulipán adaptativo */
+        .stem {
+            width: 5px;
+            background: linear-gradient(to right, #2e7d32, #4caf50);
+            margin: 0 auto;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        /* Hojas */
+        .leaf {
+            position: absolute;
+            width: 32px;
+            height: 65px;
+            background: linear-gradient(135deg, #4caf50, #81c784);
+            border-radius: 0 50% 50% 50%;
+            bottom: 30px;
+        }
+
+        .leaf.left {
+            left: -28px;
+            transform: rotate(-30deg);
+            border-radius: 50% 0 50% 50%;
+        }
+
+        .leaf.right {
+            right: -28px;
+            transform: rotate(30deg) scaleX(-1);
+            border-radius: 50% 0 50% 50%;
+        }
+
+        /* Cabeza del tulipán */
+        .flower-head {
+            position: absolute;
+            top: -65px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 60px;
+            transition: transform 0.3s ease;
+        }
+
+        .petal {
+            position: absolute;
+            background: linear-gradient(135deg, #ffee58, #fbc02d);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: inset -2px -2px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .petal.back-left {
+            width: 21px;
+            height: 55px;
+            left: 4px;
+            top: 4px;
+            transform: rotate(-15deg);
+            background: linear-gradient(135deg, #fbc02d, #f57f17);
+            z-index: 1;
+        }
+
+        .petal.back-right {
+            width: 21px;
+            height: 55px;
+            right: 4px;
+            top: 4px;
+            transform: rotate(15deg);
+            background: linear-gradient(135deg, #fbc02d, #f57f17);
+            z-index: 1;
+        }
+
+        .petal.center {
+            width: 26px;
+            height: 60px;
+            left: 12px;
+            top: 0px;
+            z-index: 2;
+            background: linear-gradient(135deg, #fff176, #fbc02d);
+        }
+
+        .petal.front-left {
+            width: 22px;
+            height: 50px;
+            left: 7px;
+            top: 8px;
+            transform: rotate(-8deg);
+            z-index: 3;
+        }
+
+        .petal.front-right {
+            width: 22px;
+            height: 50px;
+            right: 7px;
+            top: 8px;
+            transform: rotate(8deg);
+            z-index: 3;
+        }
+
+        .tulip:hover .flower-head {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        /* Suelo fijo abajo */
+        .ground {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to top, #1b5e20, #2e7d32);
+            border-top: 3px solid #4caf50;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        /* Destellos mágicos */
+        .sparkle {
+            position: absolute;
+            background: #fff;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ffeb3b;
+            animation: floatUp 3s linear infinite;
+            pointer-events: none;
+            z-index: 6;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-250px) scale(1.5); opacity: 0; }
+        }
+
+        /* Ajustes específicos para móviles pequeños */
+        @media (max-width: 480px) {
+            .message-container {
+                padding-top: 10px;
+            }
+            .garden {
+                padding-bottom: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="night-sky" id="sky"></div>
+
+    <div class="message-container">
+        <h1>Tulipanes Para La Chaparra</h1>
+        <p id="romantic-quote">"Siguele para mas mocosaa."</p>
+        <button class="quote-btn" onclick="changeQuote()">haz clik para otro mensaje pitufinaa 💌</button>
+    </div>
+
+    <div class="garden" id="garden">
+        <!-- Los tulipanes se generan dinámicamente mediante JavaScript -->
+    </div>
+
+    <div class="ground"></div>
+
+    <script>
+        // Array de mensajes personalizados
+        const quotes = [
+            "\"Tienes suerte mugrosaa.\"",
+            "\"Que nunca falten las flores amarillas en tu camino ni las sonrisas en tu alma.\"",
+            "\"Tu sonrisa ilumina todo a tu alrededor, exactamente igual que estas flores.\"",
+            "\"Un detalle pequeño para recordarte lo especial e importante que eres para mí.\"",
+            "\"Chamaca piojosaa.\""
+        ];
+
+        function changeQuote() {
+            const quoteElement = document.getElementById('romantic-quote');
+            quoteElement.style.opacity = 0;
+            setTimeout(() => {
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteElement.textContent = randomQuote;
+                quoteElement.style.opacity = 1;
+            }, 250);
+        }
+
+        document.getElementById('romantic-quote').style.transition = 'opacity 0.25s ease-in-out';
+
+        // Crear estrellas en el cielo nocturno adaptado a la pantalla
+        const sky = document.getElementById('sky');
+        const starCount = window.innerWidth < 480 ? 35 : 60;
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.top = Math.random() * 70 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            const size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            sky.appendChild(star);
+        }
+
+        // Generar los tulipanes en el jardín de manera responsiva
+        const garden = document.getElementById('garden');
+        const tulipCount = window.innerWidth < 480 ? 7 : 9;
+
+        for (let i = 0; i < tulipCount; i++) {
+            const tulip = document.createElement('div');
+            tulip.classList.add('tulip');
+            
+            const heightFactor = Math.random() * 30 - 15;
+            const stemHeight = window.innerWidth < 480 ? (150 + heightFactor) : (190 + heightFactor);
+            const scaleFactor = Math.random() * 0.2 + 0.8;
+            
+            tulip.style.transform = `scale(${scaleFactor})`;
+
+            tulip.innerHTML = `
+                <div class="stem" style="height: ${stemHeight}px;">
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                    <div class="flower-head">
+                        <div class="petal back-left"></div>
+                        <div class="petal back-right"></div>
+                        <div class="petal center"></div>
+                        <div class="petal front-left"></div>
+                        <div class="petal front-right"></div>
+                    </div>
+                </div>
+            `;
+
+            tulip.addEventListener('click', (e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                createSparkles(rect.left + rect.width / 2, rect.top + 30);
+            });
+
+            garden.appendChild(tulip);
+        }
+
+        // Función para crear destellos mágicos al hacer clic
+        function createSparkles(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.style.left = x + (Math.random() * 40 - 20) + 'px';
+                sparkle.style.top = y + 'px';
+                document.body.appendChild(sparkle);
+
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
